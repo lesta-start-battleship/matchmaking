@@ -1,7 +1,6 @@
 package rooms
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/lesta-battleship/matchmaking/internal/app/multiplayer/actors"
@@ -91,7 +90,7 @@ func (r *Room) handleConnect(senderId string, packet *packets.ConnectPlayer) err
 			players.SetInRoom(player, r)
 			r.players[i] = player
 
-			player.GetPacket(r.id, packets.NewPlayerMessage(r.id, fmt.Sprintf("Connected to room %q", r.id)))
+			player.GetPacket(r.id, packets.NewPlayerMessage(r.id, r.id))
 
 			log.Printf("Room %q: Connected player %q", r.id, player.Id())
 			log.Printf("Room %q: %v", r.id, r.players)
