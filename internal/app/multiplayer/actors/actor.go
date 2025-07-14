@@ -16,3 +16,8 @@ type Matchmaker interface {
 	AddToQueue(playerId string)
 	RemoveFromQueue(playerId string)
 }
+
+type EventListener interface {
+	Actor
+	ConnectTo(matchmaker Matchmaker)
+}

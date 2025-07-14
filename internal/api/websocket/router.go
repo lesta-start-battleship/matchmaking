@@ -7,7 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(router gin.IRouter, websocketServer *WebsocketServer, engine *multiplayer.Engine) {
+func SetupRouter(router gin.IRouter,
+	ApiGatewayrUrl string,
+	websocketServer *WebsocketServer,
+	engine *multiplayer.Engine,
+) {
+	addCors := middlewares.AddCorsMiddleware(ApiGatewayrUrl)
 	handleError := middlewares.HandleErrorMiddleware()
 	requireToken := middlewares.CheckTokenMiddleware()
 
@@ -15,7 +20,7 @@ func SetupRouter(router gin.IRouter, websocketServer *WebsocketServer, engine *m
 	rankedHandler := HandleGetJoinRanked(websocketServer, engine)
 	customHandler := HandleGetJoinCustom(websocketServer, engine)
 
-	router.Use(handleError, requireToken)
+	router.Use(handleError, addCors, requireToken)
 	router.GET("/matchmaking/random", randomHandler)
 	router.GET("/matchmaking/ranked", rankedHandler)
 	router.GET("/matchmaking/custom", customHandler)

@@ -3,6 +3,7 @@ package packets
 var packetBodyTypes = []PacketBody{
 	(*PlayerMessage)(nil),
 	(*JoinSearch)(nil),
+	(*GuildWarStarted)(nil),
 	(*CreateRoom)(nil),
 	(*JoinRoom)(nil),
 	(*PlayerMessage)(nil),
@@ -26,6 +27,17 @@ func (JoinSearch) Type() string {
 	return "JoinSearch"
 }
 func (JoinSearch) isPacketBody() {}
+
+type GuildWarStarted struct {
+	WarId        uint `json:"war_id"`
+	InitiatiorId uint `json:"initiator_guild_id"`
+	TargetId     uint `json:"target_guild_id"`
+}
+
+func (GuildWarStarted) Type() string {
+	return "GuildWarStarted"
+}
+func (GuildWarStarted) isPacketBody() {}
 
 type CreateRoom struct{}
 

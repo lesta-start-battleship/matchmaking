@@ -7,7 +7,10 @@ services:
       dockerfile: build/server.dockerfile
       target: runner
     environment:
+      - GIN_MODE=release
       - BACKEND_PORT=${BACKEND_PORT}
+      - API_GATEWAY_URL=${API_GATEWAY_URL}
+      - KAFKA_ADDR=${KAFKA_ADDR}
 
   caddy:
     container_name: caddy

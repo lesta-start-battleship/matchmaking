@@ -68,6 +68,25 @@ func (e *Engine) CreateMatchmaker(matchType matchmakers.MatchType) *matchmakers.
 	return matchmaker
 }
 
+func (e *Engine) CreateGuildMatchmaker(eventListener actors.EventListener) *matchmakers.Matchmaker {
+	matchmaker := matchmakers.NewMatchmaker(
+		infra.GenerateId(),
+		e.playerRegistry,
+		e.roomRegistry,
+		e.hub)
+	matchmakers.SetGuild(matchmaker)
+	go matchmaker.Start()
+
+	eventListener.ConnectTo(matchmaker)
+	go eventListener.Start()
+
+	e.matchmakerRegistry.Track(matchmakers.GuildMatch.String(), matchmaker)
+
+	log.Printf("Engine: Created matchmaker %q", matchmaker.Id())
+
+	return matchmaker
+}
+
 func (e *Engine) SendToMatchmaking(player *players.Player, matchType matchmakers.MatchType) {
 	e.hub.GetPacket(player.Id(), packets.NewJoinSearch(player.Id(), matchType.String()))
 }
